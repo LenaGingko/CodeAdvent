@@ -40,8 +40,7 @@ int main()
     if(!fileread){std::cout<<"\nFehler. Datei wird nicht gelesen.\n";}
 
     if(fileread.is_open()){
-        std::string ganzString;
-        while(getline(fileread, ganzString)){
+        while(!fileread.eof()){ 
             unsigned int min1,max1,min2,max2;
 
             fileread >> min1;
@@ -51,17 +50,17 @@ int main()
             fileread >> min2;
             fileread.ignore(1,'-');
             fileread >> max2;
-            std::cout << min1 << " " << max1 << " " << min2 << " " << max2 << std::endl;
-            
+            //std::cout << min1 << " " << max1 << " " << min2 << " " << max2 << "\n";
+
             Pair paar = Pair(min1,max1,min2,max2);
             paare.push_back(paar);
-            
         }
         fileread.close();
     }
 
     for(int i = 0; i < paare.size(); i++){   
-        std::cout<<paare[i]<<"\t";
+        std::cout<<paare[i];
     } 
     return 0;
+
 }
