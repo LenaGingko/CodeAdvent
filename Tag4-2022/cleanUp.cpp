@@ -17,8 +17,15 @@ class Pair {
         this->sectionID2max = max2;
     }
 
-    bool compare(){// does one contain the other -> count
+    bool compareEncapsulation(){// does one contain the other -> count
         if(sectionID1min >= sectionID2min && sectionID1max <= sectionID2max || sectionID1min <= sectionID2min && sectionID1max >= sectionID2max){
+            return true;
+        }
+        return false;
+    }
+
+    bool compareOverlap(){// does one overlap the other -> count
+        if(!(sectionID1min > sectionID2max || sectionID1max < sectionID2min)){
             return true;
         }
         return false;
@@ -33,7 +40,8 @@ std::ostream& operator<<(std::ostream &s, const Pair &pair) {
 int main()
 {
     std::vector<Pair> paare;
-    int contain = 0;
+    int containEncapsulation = 0;
+    int containOverlap = 0;
 
     std::ifstream fileread ( "List.txt" );
     if(!fileread){std::cout<<"\nFehler. Datei wird nicht gelesen.\n";}
@@ -57,12 +65,16 @@ int main()
     }
 
     for(int i = 0; i < paare.size(); i++){   
-        std::cout<<paare[i]<<" - "<< paare[i].compare()<< std::endl;
-        if(paare[i].compare()){ // bool Vergleich
-            contain++;
+        std::cout<<paare[i]<<" - Einkapselung - "<< paare[i].compareEncapsulation()<<" - Overlap - "<< paare[i].compareOverlap()<< std::endl;
+        if(paare[i].compareEncapsulation()){ // bool Vergleich
+            containEncapsulation++;
+        }
+        if(paare[i].compareOverlap()){ // bool Vergleich
+            containOverlap++;
         }
     } 
-    std::cout << "Einkapselung bei " << contain << " Paaren.";
+    std::cout << "Einkapselung bei " << containEncapsulation << " Paaren. ";
+    std::cout << "Overlap bei " << containOverlap << " Paaren.";
 
 
     return 0;
