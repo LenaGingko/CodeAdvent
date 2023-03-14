@@ -4,10 +4,10 @@
 #include <string>
 
 class Stack {      
-
-  public: 
+  private:
     std::vector<char>stapel[9];
-
+  public: 
+    
     Stack(){
         stapel[0] = {'R','G','J','B','T','V','Z'};
         stapel[1] = {'J','R','V','L'};
@@ -28,15 +28,41 @@ class Stack {
     char getTopCrater(int i){
         return stapel[i].back();
     }
+    std::vector<char> get1Stapel(int welchenStapel){
+        return stapel[welchenStapel];
+    }
+    void move9000(int menge, int from, int to){
+        int n = 0;
+        while(n < menge){
+        char kiste = getTopCrater(from-1);
+        removeTopCrater(from-1);
+        addCrater(to-1, kiste);
+        n++;
+        }
+    }
+    void move9001(int menge, int from, int to){
+        std::vector<char>kisten;
+        int n = 0;
+        while(n < menge){
+            kisten.push_back(getTopCrater(from-1));
+            removeTopCrater(from-1);
+            n++;
+        }
+        int j = kisten.size()-1;
+        while(j >= 0){
+            addCrater(to-1, kisten.at(j));
+            j--;
+        }
+    }
 };
 
-std::ostream& operator<<(std::ostream &s, const Stack &stack) {
-    s <<"Stack: ";
+std::ostream& operator<<(std::ostream &s, Stack &stack) {
+    s <<"\n\nStack: ";
     int i = 0;
     while(i < 9){
-        s <<i<<": ";
-        for(int n = 0; n < stack.stapel[i].size(); n++){
-            s <<stack.stapel[i].at(n)<< " ";
+        s <<i+1<<": ";
+        for(int n = 0; n < stack.get1Stapel(i).size(); n++){
+            s <<stack.get1Stapel(i).at(n)<< " ";
         }
         s <<"\n";
         i++;
@@ -46,11 +72,6 @@ std::ostream& operator<<(std::ostream &s, const Stack &stack) {
 
 int main()
 {
-    /*std::vector<char> stack1 = {'R','G','J','B','T','V','Z'};std::vector<char> stack2 = {'J','R','V','L'};
-    std::vector<char> stack3 = {'S','Q','F'};std::vector<char> stack4 = {'Z','H','N','L','F','V','Q','G'};
-    std::vector<char> stack5 = {'R','Q','T','J','C','S','M','W'};std::vector<char> stack6 = {'S','W','T','C','H','F'};
-    std::vector<char> stack7 = {'D','Z','C','V','F','N','J'};std::vector<char> stack8 = {'L','G','Z','D','W','R','F','Q'};
-    std::vector<char> stack9 = {'J','B','W','V','P'};*/
     int menge; int from; int to;
     std::vector<int> mengeBefehl;
     std::vector<int> fromBefehl;
@@ -62,15 +83,13 @@ int main()
     if(!fileread){std::cerr<<"\nFehler. Datei wird nicht gelesen.\n";}
 
     if(fileread.is_open()){
-        int i = 1;
+        int n = 1;
         int zeile = 11;
-        std::cout << "File geoeffnet ... ";
-        while(i != zeile){
+        while(n != zeile){
             fileread.ignore(1000, '\n');
-            ++i;
+            ++n;
         }
 
-        std::cout << "zu Zeile 11"<<std::endl;
         while(!fileread.eof()){ 
             fileread.ignore(10,'e');
             fileread >> menge;
@@ -82,17 +101,16 @@ int main()
             mengeBefehl.push_back(menge);
             fromBefehl.push_back(from);
             toBefehl.push_back(to);
-
-            //std::cout <<"Zeile: "<<zeile<<" eingelesen " <<menge<<" "<<from<<" "<<to<<std::endl;
             zeile++;
         } 
-        std::cout << "Fertig eingelesen: "<<std::endl;
+    }
+    std::cout << stapel << "\nberechnen...";
+    
+    for(int i = 0; i < mengeBefehl.size(); i++){  
+        //9000 1 Kiste pro Aktion - 9001 mehrere Kisten pro Aktion bewegen 
+
+        //stapel.move9000(mengeBefehl[i],fromBefehl[i],toBefehl[i]);
+        stapel.move9001(mengeBefehl[i],fromBefehl[i],toBefehl[i]);
     }
     std::cout << stapel;
-    /*
-    for(int i = 0; i < mengeBefehl.size(); i++){  
-        std::cout << " Move " << mengeBefehl[i] << " from " << fromBefehl[i] << " to " << toBefehl[i];
-    }
-    */
-    return 0;
-}
+}   
