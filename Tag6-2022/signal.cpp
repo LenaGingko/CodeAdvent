@@ -19,21 +19,21 @@ bool isMarker(std::string sub){
 /**Vierstellige substrings durchgehen
  * @return Marker
 */
-std::string viererSuchen(std::string input){
+std::string markerSuchen(std::string input, int size){
     std::string sub;
-    int count = 4;
+    int count = size;
 
     for (int i = 0; i < input.size(); i++) {
-       sub = input.substr (i,4); 
-       if(sub.size()<4){
+       sub = input.substr (i,size); 
+       if(sub.size()<size){
            break;
        }else{
            if(isMarker(sub)){
-               std::cout << "\nDer Marker endet bei ";
+               std::cout << "\nMarker size "<<size<<" endet bei ";
                std::cout << count<<"\n";
                break;  
            }
-           std::cout << sub << " - " << count<<"\n";
+           //std::cout << sub << " - " << count<<"\n";
        }
         count++;
     }
@@ -44,15 +44,17 @@ int main()
 {
     std::string input;
     std::string marker;
+    std::string message;
 
     std::ifstream fileread ( "Signal.txt" );
     if(!fileread){std::cout<<"\nFehler. Datei wird nicht gelesen.\n";}
 
     fileread >> input;
 
-    std::cout<<"\n";
-    marker = viererSuchen(input);
-    std::cout << "Marker: " << marker;
+    marker = markerSuchen(input, 4);
+    message = markerSuchen(input, 14);
+
+    std::cout << "Marker: " << marker << " - Message: " << message;
     
     //Ende des vierstelligen Puffers finden, alle Buchstaben unterschiedlich
 }
